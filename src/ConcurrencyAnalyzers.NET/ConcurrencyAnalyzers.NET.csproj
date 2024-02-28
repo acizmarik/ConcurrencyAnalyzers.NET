@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<PackageId>ConcurrencyAnalyzers.NET</PackageId>
+		<IncludeBuildOutput>False</IncludeBuildOutput>
+	</PropertyGroup>
+
+	<ItemGroup>
+    <PackageReference Include="Metalama.Compiler.Sdk" />
+		<PackageReference Include="PolySharp">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="bin\Debug\netstandard2.0\/ConcurrencyAnalyzers.NET.dll" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="$(OutputPath)/$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+		<None Include="$(SolutionDir)../README.md" Pack="true" PackagePath="/" />
+	</ItemGroup>
+
+</Project>

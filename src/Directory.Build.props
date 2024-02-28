@@ -1,0 +1,37 @@
+<Project>
+		<!-- Basic metadata -->
+		<PropertyGroup>
+			<Product>ConcurrencyAnalyzers.NET</Product>
+			<Authors>Andrej Čižmárik</Authors>
+			<Copyright>Copyright © Andrej Čižmárik</Copyright>
+			<RepositoryType>git</RepositoryType>
+			<RepositoryUrl>https://github.com/acizmarik/ConcurrencyAnalyzers.NET</RepositoryUrl>
+		</PropertyGroup>
+	
+		<!-- Compilation -->
+		<PropertyGroup>
+			<Nullable>enable</Nullable>
+			<LangVersion>latest</LangVersion>
+		</PropertyGroup>
+				
+		<!-- Versioning -->
+		<PropertyGroup>
+			<IsPreview>true</IsPreview>
+			<VersionPrefix>0.0.1</VersionPrefix>
+				<VersionSuffix>preview</VersionSuffix>
+			<AssemblyVersion>0.0.1</AssemblyVersion>
+			<FileVersion>0.0.1</FileVersion>
+		</PropertyGroup>
+
+		<!-- Packaging -->
+		<PropertyGroup>
+			<PackageOutputPath>$(SolutionDir)_build/</PackageOutputPath>
+			<PackageTags>CodeAnalysis;Concurrency;C#</PackageTags>
+			<PackageReadmeFile>README.md</PackageReadmeFile>
+			<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+			<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+			<Description>
+				ConcurrencyAnalyzers.NET performs dynamic analysis of .NET applications in order to search for concurrency issues. Metalama.Compiler (package based on Roslyn) is used for compilation-time instrumentation. Statically instrumented code is then executed and analyzed during runtime.
+			</Description>
+		</PropertyGroup>
+</Project>

@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+  </PropertyGroup>
+
+	<PropertyGroup>
+		<MetalamaDebugTransformedCode>true</MetalamaDebugTransformedCode>
+		<MetalamaEmitCompilerTransformedFiles>true</MetalamaEmitCompilerTransformedFiles>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="GitHubActionsTestLogger">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Metalama.Compiler" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\ConcurrencyAnalyzers.NET.Runtime\ConcurrencyAnalyzers.NET.Runtime.csproj" />
+	  <ProjectReference Include="..\..\ConcurrencyAnalyzers.NET\ConcurrencyAnalyzers.NET.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
+	</ItemGroup>
+
+</Project>

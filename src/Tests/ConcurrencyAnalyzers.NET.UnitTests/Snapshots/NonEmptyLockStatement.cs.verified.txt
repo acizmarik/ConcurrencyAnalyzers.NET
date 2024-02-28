@@ -1,0 +1,29 @@
+﻿namespace ConcurrencyAnalyzers.NET.UnitTests.Tests
+{
+    class NonEmptyLockStatement
+    {
+        public static void Test()
+        {
+            var obj = new object ();
+            bool __lockTaken__MonitorInvocationsRewriter__1 = false;
+            try
+            {
+                ConcurrencyAnalyzers.NET.Runtime.ThreadingCallbacks.Monitor.PreEnter(obj, ref __lockTaken__MonitorInvocationsRewriter__1);
+                System.Threading.Monitor.Enter(obj, ref __lockTaken__MonitorInvocationsRewriter__1);
+                ConcurrencyAnalyzers.NET.Runtime.ThreadingCallbacks.Monitor.PostEnter(obj, ref __lockTaken__MonitorInvocationsRewriter__1);
+                {
+                    System.Console.WriteLine("Hello");
+                }
+            }
+            finally
+            {
+                if (__lockTaken__MonitorInvocationsRewriter__1)
+                {
+                    ConcurrencyAnalyzers.NET.Runtime.ThreadingCallbacks.Monitor.PreExit(obj);
+                    System.Threading.Monitor.Exit(obj);
+                    ConcurrencyAnalyzers.NET.Runtime.ThreadingCallbacks.Monitor.PostExit(obj);
+                }
+            }
+        }
+    }
+}

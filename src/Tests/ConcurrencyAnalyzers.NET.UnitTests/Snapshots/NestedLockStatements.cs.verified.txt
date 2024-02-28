@@ -1,0 +1,50 @@
+﻿using System;
+
+namespace ConcurrencyAnalyzers.NET.UnitTests.Tests
+{
+    class NestedLockStatements
+    {
+        public void Test()
+        {
+            var obj1 = new object ();
+            var obj2 = new object ();
+            bool __lockTaken__MonitorInvocationsRewriter__2 = false;
+            try
+            {
+                ConcurrencyAnalyzers.NET.Runtime.ThreadingCallbacks.Monitor.PreEnter(obj1, ref __lockTaken__MonitorInvocationsRewriter__2);
+                System.Threading.Monitor.Enter(obj1, ref __lockTaken__MonitorInvocationsRewriter__2);
+                ConcurrencyAnalyzers.NET.Runtime.ThreadingCallbacks.Monitor.PostEnter(obj1, ref __lockTaken__MonitorInvocationsRewriter__2);
+                {
+                    bool __lockTaken__MonitorInvocationsRewriter__1 = false;
+                    try
+                    {
+                        ConcurrencyAnalyzers.NET.Runtime.ThreadingCallbacks.Monitor.PreEnter(obj2, ref __lockTaken__MonitorInvocationsRewriter__1);
+                        System.Threading.Monitor.Enter(obj2, ref __lockTaken__MonitorInvocationsRewriter__1);
+                        ConcurrencyAnalyzers.NET.Runtime.ThreadingCallbacks.Monitor.PostEnter(obj2, ref __lockTaken__MonitorInvocationsRewriter__1);
+                        {
+                            Console.WriteLine("Hello");
+                        }
+                    }
+                    finally
+                    {
+                        if (__lockTaken__MonitorInvocationsRewriter__1)
+                        {
+                            ConcurrencyAnalyzers.NET.Runtime.ThreadingCallbacks.Monitor.PreExit(obj2);
+                            System.Threading.Monitor.Exit(obj2);
+                            ConcurrencyAnalyzers.NET.Runtime.ThreadingCallbacks.Monitor.PostExit(obj2);
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                if (__lockTaken__MonitorInvocationsRewriter__2)
+                {
+                    ConcurrencyAnalyzers.NET.Runtime.ThreadingCallbacks.Monitor.PreExit(obj1);
+                    System.Threading.Monitor.Exit(obj1);
+                    ConcurrencyAnalyzers.NET.Runtime.ThreadingCallbacks.Monitor.PostExit(obj1);
+                }
+            }
+        }
+    }
+}

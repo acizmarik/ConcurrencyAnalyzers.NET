@@ -1,0 +1,14 @@
+﻿namespace ConcurrencyAnalyzers.NET.UnitTests.Tests
+{
+    class ExplicitMonitor_Enter_Object_Boolean__Invocation
+    {
+        public static void Test()
+        {
+            var obj = new object ();
+            var taken = false;
+            ConcurrencyAnalyzers.NET.Runtime.ThreadingCallbacks.Monitor.PreEnter(obj, ref taken);
+            System.Threading.Monitor.Enter(obj, ref taken);
+            ConcurrencyAnalyzers.NET.Runtime.ThreadingCallbacks.Monitor.PostEnter(obj, ref taken);
+        }
+    }
+}

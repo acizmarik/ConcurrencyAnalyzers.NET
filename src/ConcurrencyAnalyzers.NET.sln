@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34309.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConcurrencyAnalyzers.NET", "ConcurrencyAnalyzers.NET\ConcurrencyAnalyzers.NET.csproj", "{DDFCBA92-8747-448E-AF54-A883A594B192}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConcurrencyAnalyzers.NET.UnitTests", "Tests\ConcurrencyAnalyzers.NET.UnitTests\ConcurrencyAnalyzers.NET.UnitTests.csproj", "{72C96177-AF4C-40A8-AC3F-2BB8F25BFDAF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConcurrencyAnalyzers.NET.Runtime", "ConcurrencyAnalyzers.NET.Runtime\ConcurrencyAnalyzers.NET.Runtime.csproj", "{0A1E045B-49AC-43BE-904B-4F3081B135EB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{2DD43334-0A19-46E1-88B3-3986BBCA9502}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
+		..\LICENSE = ..\LICENSE
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConcurrencyAnalyzers.NET.IntegrationTests", "Tests\ConcurrencyAnalyzers.NET.IntegrationTests\ConcurrencyAnalyzers.NET.IntegrationTests.csproj", "{C9643FA2-D0FA-4FEB-BDB7-E490C894F7ED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{978164A2-093E-4D3D-88B8-8BB54DF3E95F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub", "GitHub", "{081B4E94-1FA5-419A-AF50-EE1F3A7D5EAF}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\main.yml = ..\.github\workflows\main.yml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DDFCBA92-8747-448E-AF54-A883A594B192}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDFCBA92-8747-448E-AF54-A883A594B192}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDFCBA92-8747-448E-AF54-A883A594B192}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDFCBA92-8747-448E-AF54-A883A594B192}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72C96177-AF4C-40A8-AC3F-2BB8F25BFDAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72C96177-AF4C-40A8-AC3F-2BB8F25BFDAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72C96177-AF4C-40A8-AC3F-2BB8F25BFDAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72C96177-AF4C-40A8-AC3F-2BB8F25BFDAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A1E045B-49AC-43BE-904B-4F3081B135EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A1E045B-49AC-43BE-904B-4F3081B135EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A1E045B-49AC-43BE-904B-4F3081B135EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A1E045B-49AC-43BE-904B-4F3081B135EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9643FA2-D0FA-4FEB-BDB7-E490C894F7ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9643FA2-D0FA-4FEB-BDB7-E490C894F7ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9643FA2-D0FA-4FEB-BDB7-E490C894F7ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9643FA2-D0FA-4FEB-BDB7-E490C894F7ED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{72C96177-AF4C-40A8-AC3F-2BB8F25BFDAF} = {978164A2-093E-4D3D-88B8-8BB54DF3E95F}
+		{C9643FA2-D0FA-4FEB-BDB7-E490C894F7ED} = {978164A2-093E-4D3D-88B8-8BB54DF3E95F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {09ECDEC9-70FB-45FE-A4D0-BC41D76FE210}
+	EndGlobalSection
+EndGlobal
