@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -9,56 +8,15 @@ namespace ConcurrencyAnalyzers.NET.Runtime
 {
 	public static class ThreadingCallbacks
 	{
-		private static readonly TimeSpan _delayBetweenCollections;
 		private static ConditionalWeakTable<Thread, ThreadInfo> _threads;
 		private static ConditionalWeakTable<object, LockInfo> _locks;
-		private static Dictionary<int, ThreadInfo> _threadInfos;
-		private static Dictionary<int, LockInfo> _locksInfos;
-		private static readonly Thread _collectorThread;
 		private static readonly object _syncObj;
 
 		static ThreadingCallbacks()
 		{
 			_threads = new();
 			_locks = new();
-			_threadInfos = [];
-			_locksInfos = [];
 			_syncObj = new object();
-
-			_delayBetweenCollections = TimeSpan.FromSeconds(value: 10);
-			_collectorThread = new Thread(CollectorThreadLoop)
-			{
-				Name = "ConcurrencyAnalyzers.NET.Collector",
-				IsBackground = true
-			};
-
-			_collectorThread.Start();
-		}
-
-		private static void CollectorThreadLoop()
-		{
-			var toDeleteThreads = new Queue<int>();
-			var toDeleteLocks = new Queue<int>();
-
-			for (;;)
-			{
-				Thread.Sleep(_delayBetweenCollections);
-
-				lock (_syncObj)
-				{
-					foreach (var kv in _threadInfos.Where(kv => !_threadInfos.TryGetValue(kv.Key, out _)))
-						toDeleteThreads.Enqueue(kv.Key);
-
-					foreach (var kv in _locksInfos.Where(kv => !_locksInfos.TryGetValue(kv.Key, out _)))
-						toDeleteLocks.Enqueue(kv.Key);
-
-					while (toDeleteThreads.Count > 0)
-						_threadInfos.Remove(toDeleteThreads.Dequeue());
-
-					while (toDeleteLocks.Count > 0)
-						_locksInfos.Remove(toDeleteLocks.Dequeue());
-				}
-			}
 		}
 
 		public static void Reset()
@@ -67,8 +25,6 @@ namespace ConcurrencyAnalyzers.NET.Runtime
 			{
 				_threads = new();
 				_locks = new();
-				_threadInfos = [];
-				_locksInfos = [];
 			}
 		}
 
@@ -83,16 +39,10 @@ namespace ConcurrencyAnalyzers.NET.Runtime
 					var threadInfo = _threads.GetOrCreateValue(thread);
 
 					if (!lockInfo.Initialized)
-					{
 						lockInfo.Initialize(lockObj);
-						_locksInfos.Add(lockInfo.ObjectId, lockInfo);
-					}
 
 					if (!threadInfo.Initialized)
-					{
 						threadInfo.Initialize(Thread.CurrentThread);
-						_threadInfos.Add(Environment.CurrentManagedThreadId, threadInfo);
-					}
 
 					threadInfo.SetWaitingForLock(lockInfo);
 					EnsureNoDeadlocks(thread, lockInfo);
@@ -121,16 +71,10 @@ namespace ConcurrencyAnalyzers.NET.Runtime
 					var threadInfo = _threads.GetOrCreateValue(thread);
 
 					if (!lockInfo.Initialized)
-					{
 						lockInfo.Initialize(lockObj);
-						_locksInfos.Add(lockInfo.ObjectId, lockInfo);
-					}
 
 					if (!threadInfo.Initialized)
-					{
 						threadInfo.Initialize(Thread.CurrentThread);
-						_threadInfos.Add(Environment.CurrentManagedThreadId, threadInfo);
-					}
 
 					threadInfo.SetWaitingForLock(lockInfo);
 					EnsureNoDeadlocks(thread, lockInfo);
@@ -180,12 +124,14 @@ namespace ConcurrencyAnalyzers.NET.Runtime
 
 			private static void EnsureNoDeadlocks(Thread thread, LockInfo lockObj)
 			{
-				var stack = new Stack<int>();
-				var visited = new HashSet<int>() { thread.ManagedThreadId };
-				stack.Push(thread.ManagedThreadId);
+				var stack = new Stack<Thread>();
+				var visited = new HashSet<Thread>() { thread };
+				stack.Push(thread);
+
 				while (stack.Count > 0)
 				{
-					var threadInfo = _threadInfos[stack.Peek()];
+					thread = stack.Peek();
+					EnsureSuccessOrThrow(_threads.TryGetValue(thread, out var threadInfo));
 					if (threadInfo.WaitingForLock is not { } lockInfo ||
 						lockInfo.Owner == null ||
 						!lockInfo.Owner.TryGetTarget(out var blockedOn))
@@ -194,12 +140,12 @@ namespace ConcurrencyAnalyzers.NET.Runtime
 						continue;
 					}
 
-					if (stack.Contains(blockedOn.ManagedThreadId))
+					if (stack.Contains(blockedOn))
 					{
 						// Deadlock
-						var threads = stack.Select(tid =>
+						var threads = stack.Select(t =>
 						{
-							_threadInfos.TryGetValue(tid, out var threadInfo);
+							EnsureSuccessOrThrow(_threads.TryGetValue(t, out var threadInfo));
 							threadInfo.Thread.TryGetTarget(out var thread);
 							return thread;
 						});
@@ -207,10 +153,10 @@ namespace ConcurrencyAnalyzers.NET.Runtime
 						throw new DeadlockException(lockObj, threads.ToArray());
 					}
 
-					if (visited.Add(blockedOn.ManagedThreadId))
+					if (visited.Add(blockedOn))
 					{
 						// Let's check that thread that the current thread is blocked on
-						stack.Push(blockedOn.ManagedThreadId);
+						stack.Push(blockedOn);
 					}
 					else
 					{
@@ -218,6 +164,9 @@ namespace ConcurrencyAnalyzers.NET.Runtime
 						stack.Pop();
 					}
 				}
+
+				stack.Clear();
+				visited.Clear();
 			}
 
 			private static void EnsureSuccessOrThrow(
